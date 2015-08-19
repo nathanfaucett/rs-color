@@ -6,5 +6,8 @@ authors = ["nathanfaucett <nathanfaucett@gmail.com>"]
 [dependencies.num]
 git = "https://github.com/nathanfaucett/rs-num.git"
 
+[dependencies.vec4]
+git = "https://github.com/nathanfaucett/rs-vec4.git"
+
 [dependencies]
 regex = "0.1.8"

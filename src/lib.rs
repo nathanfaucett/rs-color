@@ -1,6 +1,8 @@
 extern crate num;
 use num::Num;
 
+extern crate vec4;
+
 extern crate regex;
 use regex::Regex;
 
@@ -21,7 +23,7 @@ fn test_join_string() {
 
 #[inline(always)]
 fn to_256_str<T: Num>(value: T) -> String {
-    (value * T::from_u8(255)).round().to_string()
+    (value * T::from_usize(255usize)).round().to_string()
 }
 
 #[inline(always)]
@@ -44,22 +46,29 @@ fn test_to_rgba() {
 
 #[inline(always)]
 fn to_number<T: Num>(value: &str) -> T {
-    T::from_f32(value.parse::<f32>().unwrap())
+    T::from_f64(value.parse::<f64>().unwrap())
 }
 
 #[inline(always)]
 fn to_256<T: Num>(value: &str) -> T {
-    to_number::<T>(value).min(T::from_u8(255)) / T::from_u8(255)
+    to_number::<T>(value).min(T::from_usize(255usize)) / T::from_usize(255usize)
 }
 
 #[inline(always)]
 pub fn from_rgba<T: Num>(out: &mut [T; 4], string: String) -> &mut [T; 4] {
     let re = Regex::new(r"^rgba\((?:\s+)?(\d+),(?:\s+)?(\d+),(?:\s+)?(\d+),(?:\s+)?((?:\.)?\d+(?:\.\d+)?)\)$").unwrap();
-    let matches = re.captures(&string).unwrap();
-    out[0] = to_256((&matches.at(1)).unwrap());
-    out[1] = to_256((&matches.at(2)).unwrap());
-    out[2] = to_256((&matches.at(3)).unwrap());
-    out[3] = to_number::<T>((&matches.at(4).unwrap())).min(T::from_u8(1));
+
+    match re.captures(&string) {
+        Some(matches) => {
+            out[0] = to_256((&matches.at(1)).unwrap());
+            out[1] = to_256((&matches.at(2)).unwrap());
+            out[2] = to_256((&matches.at(3)).unwrap());
+            out[3] = to_number::<T>((&matches.at(4).unwrap())).min(T::from_usize(1usize));
+        },
+        None => {
+            vec4::set(out, T::zero(), T::zero(), T::zero(), T::one());
+        },
+    }
     out
 }
 #[test]
@@ -72,11 +81,19 @@ fn test_from_rgba() {
 #[inline(always)]
 pub fn from_rgb<T: Num>(out: &mut [T; 4], string: String) -> &mut [T; 4] {
     let re = Regex::new(r"^rgb\((?:\s+)?(\d+),(?:\s+)?(\d+),(?:\s+)?(\d+)\)$").unwrap();
-    let matches = re.captures(&string).unwrap();
-    out[0] = to_256((&matches.at(1)).unwrap());
-    out[1] = to_256((&matches.at(2)).unwrap());
-    out[2] = to_256((&matches.at(3)).unwrap());
-    out[3] = T::one();
+
+    match re.captures(&string) {
+        Some(matches) => {
+            out[0] = to_256((&matches.at(1)).unwrap());
+            out[1] = to_256((&matches.at(2)).unwrap());
+            out[2] = to_256((&matches.at(3)).unwrap());
+            out[3] = T::one();
+        },
+        None => {
+            vec4::set(out, T::zero(), T::zero(), T::zero(), T::one());
+        },
+    }
+
     out
 }
 #[test]
