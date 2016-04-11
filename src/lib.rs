@@ -1,3 +1,9 @@
+#![feature(collections)]
+#![no_std]
+
+extern crate collections;
+use collections::string::String;
+
 extern crate num;
 use num::Num;
 
@@ -15,6 +21,7 @@ macro_rules! join_string {
         }
     )
 }
+
 #[test]
 fn test_join_string() {
     let s = join_string!("a", "b", "c");
