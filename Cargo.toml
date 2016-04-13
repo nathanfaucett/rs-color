@@ -10,7 +10,7 @@ git = "https://github.com/nathanfaucett/rs-num.git"
 git = "https://github.com/nathanfaucett/rs-vec4.git"
 
 [dependencies.concat_string]
-path = "../../rs-concat_string"
+git = "https://github.com/nathanfaucett/rs-concat_string.git"
 
 [dependencies]
 regex = "0.1.65"
