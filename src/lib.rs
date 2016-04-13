@@ -4,6 +4,9 @@
 extern crate collections;
 use collections::string::String;
 
+#[macro_use(concat_string)]
+extern crate concat_string;
+
 extern crate num;
 use num::Num;
 
@@ -12,21 +15,6 @@ extern crate vec4;
 extern crate regex;
 use regex::Regex;
 
-macro_rules! join_string {
-    ($($e:expr),*) => (
-        {
-            let mut s = String::new();
-            $(s.push_str($e);)*
-            s
-        }
-    )
-}
-
-#[test]
-fn test_join_string() {
-    let s = join_string!("a", "b", "c");
-    assert_eq!(&s, "abc")
-}
 
 #[inline(always)]
 fn to_256_str<T: Num>(value: T) -> String {
@@ -35,7 +23,7 @@ fn to_256_str<T: Num>(value: T) -> String {
 
 #[inline(always)]
 pub fn to_rgb<T: Num>(out: [T; 4]) -> String {
-    join_string!("rgb(", &to_256_str(out[0]), ", ", &to_256_str(out[1]), ", ", &to_256_str(out[2]), ")")
+    concat_string!("rgb(", &to_256_str(out[0]), ", ", &to_256_str(out[1]), ", ", &to_256_str(out[2]), ")")
 }
 #[test]
 fn test_to_rgb() {
@@ -44,7 +32,7 @@ fn test_to_rgb() {
 
 #[inline(always)]
 pub fn to_rgba<T: Num>(out: [T; 4]) -> String {
-    join_string!("rgba(", &to_256_str(out[0]), ", ", &to_256_str(out[1]), ", ", &to_256_str(out[2]), ", ", &(out[3].to_string()), ")")
+    concat_string!("rgba(", &to_256_str(out[0]), ", ", &to_256_str(out[1]), ", ", &to_256_str(out[2]), ", ", &(out[3].to_string()), ")")
 }
 #[test]
 fn test_to_rgba() {
