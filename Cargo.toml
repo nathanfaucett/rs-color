@@ -20,4 +20,4 @@ git = "https://github.com/nathanfaucett/rs-vec4.git"
 git = "https://github.com/nathanfaucett/rs-concat_string.git"
 
 [dependencies]
-regex = "0.1.65"
+regex = "0.2"
