@@ -60,8 +60,12 @@ pub fn from_rgba<T: Num>(out: &mut [T; 4], string: String) -> &mut [T; 4] {
 #[test]
 fn test_from_rgba() {
     let mut v = [0.0, 0.0, 0.0, 1.0];
+
     from_rgba(&mut v, String::from("rgba( 255, 128, 0, 1)"));
-    assert_eq!(v, [1.0, 128.0 / 255.0, 0.0, 1.0])
+    assert_eq!(v, [1.0, 128.0 / 255.0, 0.0, 1.0]);
+
+    from_rgba(&mut v, String::from("rgba(0, 0, 0, 1)"));
+    assert_eq!(v, [0.0, 0.0, 0.0, 1.0]);
 }
 
 #[inline(always)]
@@ -85,6 +89,10 @@ pub fn from_rgb<T: Num>(out: &mut [T; 4], string: String) -> &mut [T; 4] {
 #[test]
 fn test_from_rgb() {
     let mut v = [0.0, 0.0, 0.0, 1.0];
+
     from_rgb(&mut v, String::from("rgb( 255, 128, 0)"));
-    assert_eq!(v, [1.0, 128.0 / 255.0, 0.0, 1.0])
+    assert_eq!(v, [1.0, 128.0 / 255.0, 0.0, 1.0]);
+
+    from_rgb(&mut v, String::from("rgb(0, 0, 0)"));
+    assert_eq!(v, [0.0, 0.0, 0.0, 1.0]);
 }
