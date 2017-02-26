@@ -5,13 +5,13 @@ use num::Num;
 use regex::Regex;
 
 
-#[inline(always)]
-fn to_256_str<T: Num>(value: T) -> String {
+#[inline]
+fn to_256_str<T: Copy + Num>(value: T) -> String {
     (value * T::from_usize(255usize)).round().to_string()
 }
 
-#[inline(always)]
-pub fn to_rgb<T: Num>(out: [T; 4]) -> String {
+#[inline]
+pub fn to_rgb<T: Copy + Num>(out: [T; 4]) -> String {
     concat_string!("rgb(", &to_256_str(out[0]), ", ", &to_256_str(out[1]), ", ", &to_256_str(out[2]), ")")
 }
 #[test]
@@ -19,8 +19,8 @@ fn test_to_rgb() {
     assert_eq!(&to_rgb([1.0, 0.5, 0.0, 1.0]), "rgb(255, 128, 0)")
 }
 
-#[inline(always)]
-pub fn to_rgba<T: Num>(out: [T; 4]) -> String {
+#[inline]
+pub fn to_rgba<T: Copy + Num>(out: [T; 4]) -> String {
     concat_string!("rgba(", &to_256_str(out[0]), ", ", &to_256_str(out[1]), ", ", &to_256_str(out[2]), ", ", &(out[3].to_string()), ")")
 }
 #[test]
@@ -28,18 +28,18 @@ fn test_to_rgba() {
     assert_eq!(&to_rgba([1.0, 0.5, 0.0, 1.0]), "rgba(255, 128, 0, 1)")
 }
 
-#[inline(always)]
-fn to_number<T: Num>(value: &str) -> T {
+#[inline]
+fn to_number<T: Copy + Num>(value: &str) -> T {
     T::from_f64(value.parse::<f64>().unwrap())
 }
 
-#[inline(always)]
-fn to_256<T: Num>(value: &str) -> T {
-    to_number::<T>(value).min(T::from_usize(255usize)) / T::from_usize(255usize)
+#[inline]
+fn to_256<T: Copy + Num>(value: &str) -> T {
+    to_number::<T>(value).min(&T::from_usize(255usize)) / T::from_usize(255usize)
 }
 
-#[inline(always)]
-pub fn from_rgba<T: Num>(out: &mut [T; 4], string: String) -> &mut [T; 4] {
+#[inline]
+pub fn from_rgba<T: Copy + Num>(out: &mut [T; 4], string: String) -> &mut [T; 4] {
     let re = Regex::new(r"^rgba\((?:\s+)?(\d+),(?:\s+)?(\d+),(?:\s+)?(\d+),(?:\s+)?((?:\.)?\d+(?:\.\d+)?)\)$").unwrap();
 
     match re.captures(&string) {
@@ -49,7 +49,7 @@ pub fn from_rgba<T: Num>(out: &mut [T; 4], string: String) -> &mut [T; 4] {
             out[2] = to_256(matches.get(3).unwrap().as_str());
             out[3] = to_number::<T>(
                 matches.get(4).unwrap().as_str()
-            ).min(T::from_usize(1usize));
+            ).min(&T::from_usize(1usize));
         },
         None => {
             vec4::set(out, T::zero(), T::zero(), T::zero(), T::one());
@@ -68,8 +68,8 @@ fn test_from_rgba() {
     assert_eq!(v, [0.0, 0.0, 0.0, 1.0]);
 }
 
-#[inline(always)]
-pub fn from_rgb<T: Num>(out: &mut [T; 4], string: String) -> &mut [T; 4] {
+#[inline]
+pub fn from_rgb<T: Copy + Num>(out: &mut [T; 4], string: String) -> &mut [T; 4] {
     let re = Regex::new(r"^rgb\((?:\s+)?(\d+),(?:\s+)?(\d+),(?:\s+)?(\d+)\)$").unwrap();
 
     match re.captures(&string) {
