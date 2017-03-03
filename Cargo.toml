@@ -10,14 +10,9 @@ readme = "README.md"
 repository = "https://github.com/nathanfaucett/rs-color.git"
 homepage = "https://github.com/nathanfaucett/rs-color"
 
-[dependencies.num]
-git = "https://github.com/nathanfaucett/rs-num.git"
-
-[dependencies.vec4]
-git = "https://github.com/nathanfaucett/rs-vec4.git"
-
-[dependencies.concat_string]
-git = "https://github.com/nathanfaucett/rs-concat_string.git"
-
 [dependencies]
-regex = "0.2"
+num = {git = "https://github.com/nathanfaucett/rs-num.git"}
+vec4 = {git = "https://github.com/nathanfaucett/rs-vec4.git"}
+concat_string = {git = "https://github.com/nathanfaucett/rs-concat_string.git"}
+regex = {version = "0.2"}
+lazy_static = {version = "0.2", features = ["spin_no_std"]}

@@ -40,9 +40,13 @@ fn to_256<T: Copy + Num>(value: &str) -> T {
 
 #[inline]
 pub fn from_rgba<T: Copy + Num>(out: &mut [T; 4], string: String) -> &mut [T; 4] {
-    let re = Regex::new(r"^rgba\((?:\s+)?(\d+),(?:\s+)?(\d+),(?:\s+)?(\d+),(?:\s+)?((?:\.)?\d+(?:\.\d+)?)\)$").unwrap();
+    lazy_static! {
+        static ref RE: Regex = Regex::new(
+            r"^rgba\((?:\s+)?(\d+),(?:\s+)?(\d+),(?:\s+)?(\d+),(?:\s+)?((?:\.)?\d+(?:\.\d+)?)\)$"
+        ).unwrap();
+    }
 
-    match re.captures(&string) {
+    match RE.captures(&string) {
         Some(matches) => {
             out[0] = to_256(matches.get(1).unwrap().as_str());
             out[1] = to_256(matches.get(2).unwrap().as_str());
@@ -70,9 +74,13 @@ fn test_from_rgba() {
 
 #[inline]
 pub fn from_rgb<T: Copy + Num>(out: &mut [T; 4], string: String) -> &mut [T; 4] {
-    let re = Regex::new(r"^rgb\((?:\s+)?(\d+),(?:\s+)?(\d+),(?:\s+)?(\d+)\)$").unwrap();
+    lazy_static! {
+        static ref RE: Regex = Regex::new(
+            r"^rgb\((?:\s+)?(\d+),(?:\s+)?(\d+),(?:\s+)?(\d+)\)$"
+        ).unwrap();
+    }
 
-    match re.captures(&string) {
+    match RE.captures(&string) {
         Some(matches) => {
             out[0] = to_256(matches.get(1).unwrap().as_str());
             out[1] = to_256(matches.get(2).unwrap().as_str());
