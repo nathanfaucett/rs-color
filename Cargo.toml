@@ -15,4 +15,3 @@ num = {git = "https://github.com/nathanfaucett/rs-num.git"}
 vec4 = {git = "https://github.com/nathanfaucett/rs-vec4.git"}
 concat_string = {git = "https://github.com/nathanfaucett/rs-concat_string.git"}
 regex = {version = "0.2"}
-lazy_static = {version = "0.2", features = ["spin_no_std"]}

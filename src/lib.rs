@@ -4,8 +4,8 @@
 
 extern crate collections;
 
-#[macro_use] extern crate lazy_static;
-#[macro_use] extern crate concat_string;
+#[macro_use]
+extern crate concat_string;
 extern crate num;
 
 extern crate vec4;
